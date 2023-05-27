@@ -8,7 +8,7 @@ let config ={
             gravity: { y:1000 }
         }
     },
-    scene: [Scene1]
+    scene: [TestScene]
 };
 
 let game = new Phaser.Game(config);
