@@ -74,8 +74,7 @@ class Game extends Phaser.Scene {
         this.player = this.physics.add.image(sceneWidth/2 - 100, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(45,100).setOffset(50,50);
         this.player.setCollideWorldBounds(true);
         this.player.body.onCollide = true;
-
-
+        
         this.tweens.add({
             targets: this.player,
             duration: 2000,
@@ -103,6 +102,14 @@ class Game extends Phaser.Scene {
                 targets: [this.progressBack, this.bar, this.progressFront, this.currentScore],
                 duration: 1000,
                 alpha: 1
+            });
+            this.tweens.add({
+                targets: this.player,
+                duration: 1000,
+                y: this.player.y - 12,
+                yoyo: true,
+                ease: 'Circular',
+                repeat: -1
             });
         });
 
@@ -248,7 +255,9 @@ class Game extends Phaser.Scene {
                     this.player.body.velocity.x += 30 ;
                 }else if (this.player.body.velocity.x > 0){
                         this.player.body.velocity.x -= 20;
-                    } else this.player.body.velocity.x += 20;
+                    } else if (this.player.body.velocity.x < 0){
+                        this.player.body.velocity.x += 20;
+                    }
 
                 if (this.physics.overlap(this.player, this.obstacleGroup)) {
                     this.obstacleCollide();
