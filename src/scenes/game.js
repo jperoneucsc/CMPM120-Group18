@@ -10,6 +10,7 @@ class Game extends Phaser.Scene {
         this.allow_input    = false;    // Can player move
         this.is_pause       = false;    // is the game paused?
         this.is_gameover    = false;    // display gameover screen?
+        this.current_count  = 0;        // current score
     } 
 
     preload(){
@@ -43,14 +44,10 @@ class Game extends Phaser.Scene {
 
         this.background = this.add.tileSprite(0, 0, 1080, 1920, 'background').setOrigin(0,0);
 
-
-        this.obstacleGroup = this.add.group({  
-            runChildUpdate: true    
-        });
+    
         
-        this.carGroup = this.add.group({
-            runChildUpdate: true
-        })
+        
+
         
         /*      temp disabled coins
         this.coinGroup = this.add.group({  
@@ -79,6 +76,9 @@ class Game extends Phaser.Scene {
             ease: 'Power1'
         }).on('complete', () => {
             this.allow_input = true;
+            var style2 = { font: "Bold 42px Arial", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
+            this.currentScore = this.add.text(1080/2, 1800, "current score: " + this.current_count, style2).setOrigin(.5,.5).setVisible(false);
+            this.currentScore.setDepth(1);
         });
 
         
@@ -94,7 +94,14 @@ class Game extends Phaser.Scene {
             this.addObstacle();
         });
 
-    
+        this.obstacleGroup = this.add.group({  
+            runChildUpdate: true    
+        });
+        
+        this.carGroup = this.add.group({
+            runChildUpdate: true
+        })
+
 
     }
 
@@ -109,7 +116,8 @@ class Game extends Phaser.Scene {
     }
 
     obstacleCollide() {
-        this.player.destroy()
+        this.allow_input = false;
+        this.is_gameover = true;
     } 
 
     addCar() {
@@ -145,8 +153,12 @@ class Game extends Phaser.Scene {
 
     update()
     {  
+        this.current_count += 1;
         if(this.is_gameover == false){
             if(this.allow_input == true && this.is_gameover == false){
+                this.currentScore.setVisible(true);
+                this.currentScore.text = "current score: " + this.current_count;
+
                 this.background.tilePositionY += 15;
 
                 // -------------------------------- PLAYER MOVEMENT ---------------------------------------
@@ -172,7 +184,7 @@ class Game extends Phaser.Scene {
             }else this.background.tilePositionY += 18;
         }else {
             this.time.delayedCall(50, () => {
-                this.player.destroy()
+                this.player.destroy();
             });
 
 
