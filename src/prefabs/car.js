@@ -1,9 +1,11 @@
 class Car extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, velocity, carNum) {
+    constructor(scene, velocity, carNum,) {
         // Determine spawn lane and call Phaser Physics Sprite constructor
         if(Phaser.Math.Between(0,1) == 0){
             super(scene, 320, 2400, carNum);
-        } else super(scene, 750, 2400, carNum);
+        } else {
+            super(scene, 750, 2400, carNum);
+        }
 
         this.parentScene = scene;               // maintain scene context
 
@@ -15,13 +17,14 @@ class Car extends Phaser.Physics.Arcade.Sprite {
         this.setImmovable();                    
         this.newBarrier = true;                 // custom property to control barrier spawning
         this.setSize(190,190);
+
     } 
 
     update() {
         // add new barrier when existing barrier hits center X
         if(this.newBarrier && this.y < 0) {
             // (recursively) call parent scene method from this context
-            this.parentScene.addCar(this.parent, 500);
+            this.parentScene.addCar();
             this.newBarrier = false;
         }
 
