@@ -88,14 +88,18 @@ class Game extends Phaser.Scene {
             this.currentScore = this.add.text(1080/2, 1800, "SCORE: " + this.current_count, style2).setOrigin(.5,.5).setVisible(false);
             this.currentScore.setDepth(1);
 
-            this.progressBack = this.add.image(1080/2, 55, 'progressBack').setDepth(1);
+            this.progressBack = this.add.image(1080/2, 75, 'progressBack').setDepth(1);
             this.progressBack.alpha = 0;
-            this.bar = this.add.graphics().setDepth(2);
+            this.bar = this.add.graphics().setDepth(4);
             this.bar.alpha = 0;
-            this.progressFront = this.add.image(1080/2, 55, 'progressFront').setDepth(3);
+            this.bar2 = this.add.graphics().setDepth(3);
+            this.bar2.alpha = 0;
+            this.bar3 = this.add.graphics().setDepth(2);
+            this.bar3.alpha = 0;
+            this.progressFront = this.add.image(1080/2, 75, 'progressFront').setDepth(5);
             this.progressFront.alpha = 0;
 
-            this.fire = this.add.sprite(1000, 60, 'fire').play('fireanim').setDepth(4);
+            this.fire = this.add.sprite(1000, 70, 'fire').play('fireanim').setDepth(6);
             this.fire.alpha = 0;
 
             this.add.tween({
@@ -188,15 +192,21 @@ class Game extends Phaser.Scene {
         this.is_gameover = true;
     } 
 
-    setBarPercent(score){
-        let percent = score/3000
-        this.progressMiddle.width = percent;
-    }
-
     renderBar(){
-        this.bar.fillStyle(0x00FF00, 0.8);
-        this.bar.fillRect(100, 10, (this.current_count/3000)*900, 95);
-
+        if (this.current_count < 920){
+            this.bar.fillStyle(0x00FF00, 0.8);
+            this.bar.fillRect(100, 30, (this.current_count/3000)*900, 95);
+        }
+        if (this.current_count > 920 && this.current_count < 2000){
+            this.bar2.alpha = 1;
+            this.bar2.fillStyle(0x0000FF, 0.8);
+            this.bar2.fillRect(100, 30, (this.current_count/3000)*900, 95);
+        }
+        if (this.current_count > 2000 && this.current_count < 3000){
+            this.bar3.alpha = 1;
+            this.bar3.fillStyle(0xFF0000, 0.8);
+            this.bar3.fillRect(100, 30, (this.current_count/3000)*900, 95);
+        }
         if (this.current_count == 3100){
             this.add.tween({
                 targets: this.fire,
