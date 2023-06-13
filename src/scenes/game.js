@@ -28,6 +28,7 @@ class Game extends Phaser.Scene {
 
 
     create() {
+
         // Get the screen width + height
         const width = this.scale.width;
         const height = this.scale.height;
@@ -43,11 +44,6 @@ class Game extends Phaser.Scene {
 
         this.background = this.add.tileSprite(0, 0, 1080, 1920, 'background').setOrigin(0,0);
 
-        this.player = this.physics.add.image(sceneWidth/2, 200, 'skateboarder').setScale(1.5).setAngle(180).setSize(35,160).setOffset(55,10);
-        this.player.setCollideWorldBounds(true);
-
-
-        this.player.body.onCollide = true;  
 
         this.obstacleGroup = this.add.group({  
             runChildUpdate: true    
@@ -56,7 +52,7 @@ class Game extends Phaser.Scene {
         this.carGroup = this.add.group({
             runChildUpdate: true
         })
-
+        
         /*      temp disabled coins
         this.coinGroup = this.add.group({  
             runChildUpdate: true    
@@ -64,15 +60,41 @@ class Game extends Phaser.Scene {
 
         this.addCoin();
         */
+       
+        // Fade in camera
+        this.cameras.main.fadeIn(1000);
 
+
+        // Animate the character moving onscreen, then allow player movement
+            
+        this.player = this.physics.add.image(sceneWidth/2, -500, 'skateboarder').setScale(1.5).setAngle(180).setSize(35,160).setOffset(55,10);
+        this.player.setCollideWorldBounds(true);
+        this.player.body.onCollide = true;
+
+/*
+        this.tweens.add({
+            targets: this.player,
+            duration: 5000,
+            y: this.player.y + 100
+        })
+        */
+
+
+
+        this.player.allow_input = true;
+
+        // wait 3 seconds, then spawn the first car
         this.time.delayedCall(3000, () => { 
             this.addCar(); 
+            this.addObstacle();
         });
+
+    
 
     }
 
     addObstacle() {
-        let obstacle = new Obstacle(this, 1500);
+        let obstacle = new Obstacle(this, 900);
         this.obstacleGroup.add(obstacle);
     }
 
@@ -115,7 +137,7 @@ class Game extends Phaser.Scene {
         const cursors = this.input.keyboard.createCursorKeys();
         const keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE");
 
-        this.background.tilePositionY += 20;
+        this.background.tilePositionY += 15;
 
         // Check if player is pressing left or right, with shift or not
         if (cursors.left.isDown || keys.A.isDown){

@@ -1,7 +1,9 @@
 class Obstacle extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, velocity) {
         // call Phaser Physics Sprite constructor
-        super(scene, Phaser.Math.Between(0, 1080), 2250, 'obstacle'); 
+        if(Phaser.Math.Between(0,1) == 0){
+            super(scene, 50, 2400, 'obstacle');
+        } else super(scene, 1020, 2400, 'obstacle');
         this.parentScene = scene;               // maintain scene context
 
         // set up physics sprite
@@ -11,6 +13,7 @@ class Obstacle extends Phaser.Physics.Arcade.Sprite {
         this.setImmovable();                    
         //this.tint = Math.random() * 0xFFFFFF;   // randomize tint
         this.newBarrier = true;                 // custom property to control barrier spawning
+        this.setScale(.8);
     } 
 
     update() {

@@ -2,8 +2,8 @@ class Car extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, velocity, carNum) {
         // Determine spawn lane and call Phaser Physics Sprite constructor
         if(Phaser.Math.Between(0,1) == 0){
-            super(scene, 320, 2300, carNum);
-        } else super(scene, 750, 2300, carNum);
+            super(scene, 320, 2400, carNum);
+        } else super(scene, 750, 2400, carNum);
 
         this.parentScene = scene;               // maintain scene context
 
