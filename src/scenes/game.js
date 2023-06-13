@@ -15,6 +15,9 @@ class Game extends Phaser.Scene {
 
     preload(){
         this.load.image('background', 'src/assets/game/gameBG.png')
+        this.load.image('progressBack', 'src/assets/game/progressBarBackground.png')
+        this.load.image('progressMiddle', 'src/assets/game/progressBarMiddle.png')
+        this.load.image('progressFront', 'src/assets/game/progressBarFront.png')
         this.load.image('skateboarder', 'src/assets/game/skater_player.png')
         this.load.image('car1', 'src/assets/game/car1.png')
         this.load.image('car2', 'src/assets/game/car2.png')
@@ -22,6 +25,7 @@ class Game extends Phaser.Scene {
         this.load.image('car4', 'src/assets/game/car4.png')
         this.load.image('trashcan', 'src/assets/game/trash.png')
         this.load.image('hydrant', 'src/assets/game/hydrant.png')
+
 
         //this.load.audio('rollingSound', 'src/assets/skateboardingSound.mp3')
     }
@@ -47,16 +51,6 @@ class Game extends Phaser.Scene {
     
         
         
-
-        
-        /*      temp disabled coins
-        this.coinGroup = this.add.group({  
-            runChildUpdate: true    
-        });
-
-        this.addCoin();
-        */
-       
         // Fade in camera
         this.cameras.main.fadeIn(1000);
 
@@ -71,14 +65,25 @@ class Game extends Phaser.Scene {
         this.tweens.add({
             targets: this.player,
             duration: 2000,
-            y: this.player.y + 450,
+            y: this.player.y + 510,
             x: this.player.x + 100,
             ease: 'Power1'
         }).on('complete', () => {
             this.allow_input = true;
             var style2 = { font: "Bold 42px Arial", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
+
             this.currentScore = this.add.text(1080/2, 1800, "current score: " + this.current_count, style2).setOrigin(.5,.5).setVisible(false);
             this.currentScore.setDepth(1);
+
+            this.progressBack = this.add.image(1080/2, 55, 'progressBack').setDepth(1);
+            this.bar = this.add.graphics().setDepth(2);
+            this.progressFront = this.add.image(1080/2, 55, 'progressFront').setDepth(3);
+
+            this.add.tween({
+                targets: [this.progressBack, this.bar, this.progressFront, this.currentScore],
+                duration: 1000,
+                alpha: {start: 0, end: 1}
+            });
         });
 
         
@@ -106,11 +111,23 @@ class Game extends Phaser.Scene {
     }
 
     addObstacle() {
+        let speed = 900;
+        if(this.current_count >= 500){
+            speed = 1080;
+        }
+        if(this.current_count >= 1000){
+            speed = 1080;
+        }
+        if(this.current_count >= 2000){
+            speed = 1380;
+        }
+
+
         if(Phaser.Math.Between(1,2) == 1){
-            let obstacle = new Obstacle(this, 900, 'trashcan');
+            let obstacle = new Obstacle(this, speed, 'trashcan');
             this.obstacleGroup.add(obstacle);
         }else {
-            let obstacle = new Obstacle(this, 900, 'hydrant');
+            let obstacle = new Obstacle(this, speed, 'hydrant');
             this.obstacleGroup.add(obstacle);
         }
     }
@@ -121,7 +138,19 @@ class Game extends Phaser.Scene {
     } 
 
     addCar() {
-        let speedVariance =  Phaser.Math.Between(1400, 1600);
+        // Three stages:
+        // over 500
+        // over 1000
+        // over 3000
+        let speedVariance = 1100;
+        if(this.current_count > 500 && this.current_count < 1000){
+            speedVariance =  Phaser.Math.Between(1300, 1500);
+        }if(this.current_count >= 1000 && this.current_count < 2000){
+            speedVariance =  Phaser.Math.Between(1600, 1700);
+        }
+        if(this.current_count >= 2000){
+            speedVariance =  Phaser.Math.Between(2100, 2150);
+        }
         let randomNum = Phaser.Math.Between(1,4);
         let car = new Car(this, speedVariance, 'car' + randomNum);
         this.carGroup.add(car);
@@ -132,6 +161,15 @@ class Game extends Phaser.Scene {
         this.is_gameover = true;
     } 
 
+    setBarPercent(score){
+        let percent = score/3000
+        this.progressMiddle.width = percent;
+    }
+
+    renderBar(){
+        this.bar.fillStyle(0x00FF00, 0.8);
+        this.bar.fillRect(100, 10, (this.current_count/3000)*900, 95);
+    }
 /*
     addCoin() {
         let CspeedVariance =  Phaser.Math.Between(100, 500);
@@ -153,13 +191,22 @@ class Game extends Phaser.Scene {
 
     update()
     {  
-        this.current_count += 1;
         if(this.is_gameover == false){
             if(this.allow_input == true && this.is_gameover == false){
+                this.current_count += 1;
+                this.renderBar();
                 this.currentScore.setVisible(true);
                 this.currentScore.text = "current score: " + this.current_count;
 
-                this.background.tilePositionY += 15;
+                if(this.current_count < 500){
+                    this.background.tilePositionY += 15;
+                }
+                if(this.current_count >= 500 && this.current_count < 2000){
+                    this.background.tilePositionY += 18;
+                }
+                if(this.current_count >= 2000){
+                    this.background.tilePositionY += 23;
+                }
 
                 // -------------------------------- PLAYER MOVEMENT ---------------------------------------
                 const cursors = this.input.keyboard.createCursorKeys();
