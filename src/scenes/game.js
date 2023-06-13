@@ -25,6 +25,8 @@ class Game extends Phaser.Scene {
         this.load.image('car4', 'src/assets/game/car4.png')
         this.load.image('trashcan', 'src/assets/game/trash.png')
         this.load.image('hydrant', 'src/assets/game/hydrant.png')
+        this.load.atlas('fire', 'src/assets/game/fire.png', 'src/assets/game/fire.json')
+        
 
 
         //this.load.audio('rollingSound', 'src/assets/skateboardingSound.mp3')
@@ -33,6 +35,18 @@ class Game extends Phaser.Scene {
 
 
     create() {
+        this.anims.create({
+            key: 'fireanim',
+            duration: 700,
+            frames: this.anims.generateFrameNames('fire', {
+                start: 1,
+                end: 2,
+                prefix: 'fire',
+                suffix: '.png'
+            }),
+            repeat: -1
+        });
+
         // Get the screen width + height
         const width = this.scale.width;
         const height = this.scale.height;
@@ -65,24 +79,30 @@ class Game extends Phaser.Scene {
         this.tweens.add({
             targets: this.player,
             duration: 2000,
-            y: this.player.y + 510,
+            y: this.player.y + 550,
             x: this.player.x + 100,
             ease: 'Power1'
         }).on('complete', () => {
             this.allow_input = true;
             var style2 = { font: "Bold 42px Arial", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
 
-            this.currentScore = this.add.text(1080/2, 1800, "current score: " + this.current_count, style2).setOrigin(.5,.5).setVisible(false);
+            this.currentScore = this.add.text(1080/2, 1800, "SCORE: " + this.current_count, style2).setOrigin(.5,.5).setVisible(false);
             this.currentScore.setDepth(1);
 
             this.progressBack = this.add.image(1080/2, 55, 'progressBack').setDepth(1);
+            this.progressBack.alpha = 0;
             this.bar = this.add.graphics().setDepth(2);
+            this.bar.alpha = 0;
             this.progressFront = this.add.image(1080/2, 55, 'progressFront').setDepth(3);
+            this.progressFront.alpha = 0;
+
+            this.fire = this.add.sprite(1000, 60, 'fire').play('fireanim').setDepth(4);
+            this.fire.alpha = 0;
 
             this.add.tween({
                 targets: [this.progressBack, this.bar, this.progressFront, this.currentScore],
                 duration: 1000,
-                alpha: {start: 0, end: 1}
+                alpha: 1
             });
         });
 
@@ -115,7 +135,7 @@ class Game extends Phaser.Scene {
         if(this.current_count >= 500){
             speed = 1080;
         }
-        if(this.current_count >= 1000){
+        if(this.current_count >= 900 && this.current_count < 2000){
             speed = 1080;
         }
         if(this.current_count >= 2000){
@@ -143,9 +163,9 @@ class Game extends Phaser.Scene {
         // over 1000
         // over 3000
         let speedVariance = 1100;
-        if(this.current_count > 500 && this.current_count < 1000){
+        if(this.current_count > 500 && this.current_count < 900){
             speedVariance =  Phaser.Math.Between(1300, 1500);
-        }if(this.current_count >= 1000 && this.current_count < 2000){
+        }if(this.current_count >= 900 && this.current_count < 2000){
             speedVariance =  Phaser.Math.Between(1600, 1700);
         }
         if(this.current_count >= 2000){
@@ -169,6 +189,14 @@ class Game extends Phaser.Scene {
     renderBar(){
         this.bar.fillStyle(0x00FF00, 0.8);
         this.bar.fillRect(100, 10, (this.current_count/3000)*900, 95);
+
+        if (this.current_count == 3100){
+            this.add.tween({
+                targets: this.fire,
+                duration: 1000,
+                alpha: 1
+            });
+        }
     }
 /*
     addCoin() {
@@ -196,7 +224,7 @@ class Game extends Phaser.Scene {
                 this.current_count += 1;
                 this.renderBar();
                 this.currentScore.setVisible(true);
-                this.currentScore.text = "current score: " + this.current_count;
+                this.currentScore.text = "SCORE: " + this.current_count;
 
                 if(this.current_count < 500){
                     this.background.tilePositionY += 15;
