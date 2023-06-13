@@ -1,9 +1,9 @@
 class Obstacle extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, velocity) {
+    constructor(scene, velocity, obst) {
         // call Phaser Physics Sprite constructor
         if(Phaser.Math.Between(0,1) == 0){
-            super(scene, 50, 2400, 'obstacle');
-        } else super(scene, 1020, 2400, 'obstacle');
+            super(scene, 50, 2400, obst);
+        } else super(scene, 1025, 2400, obst);
         this.parentScene = scene;               // maintain scene context
 
         // set up physics sprite
@@ -28,5 +28,9 @@ class Obstacle extends Phaser.Physics.Arcade.Sprite {
         if(this.y < -200) {
             this.destroy();
         } 
+
+        if(this.parentScene.is_gameover == true){
+            this.setVelocityY(0);
+        }
     }
 }

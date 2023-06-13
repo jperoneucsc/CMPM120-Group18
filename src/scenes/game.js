@@ -20,7 +20,7 @@ class Game extends Phaser.Scene {
         this.load.image('car3', 'src/assets/game/car3.png')
         this.load.image('car4', 'src/assets/game/car4.png')
         this.load.image('trashcan', 'src/assets/game/trash.png')
-        this.load.image('obstacle', 'src/assets/game/trash.png')
+        this.load.image('hydrant', 'src/assets/game/hydrant.png')
 
         //this.load.audio('rollingSound', 'src/assets/skateboardingSound.mp3')
     }
@@ -28,7 +28,6 @@ class Game extends Phaser.Scene {
 
 
     create() {
-
         // Get the screen width + height
         const width = this.scale.width;
         const height = this.scale.height;
@@ -40,7 +39,7 @@ class Game extends Phaser.Scene {
         const sceneWidth = 1080;
         const sceneHeight = 1920;
 
-        this.physics.world.setBounds(0,0, sceneWidth, sceneHeight);
+        this.physics.world.setBounds(0,-300, sceneWidth, sceneHeight);
 
         this.background = this.add.tileSprite(0, 0, 1080, 1920, 'background').setOrigin(0,0);
 
@@ -67,21 +66,27 @@ class Game extends Phaser.Scene {
 
         // Animate the character moving onscreen, then allow player movement
             
-        this.player = this.physics.add.image(sceneWidth/2, -500, 'skateboarder').setScale(1.5).setAngle(180).setSize(35,160).setOffset(55,10);
+        this.player = this.physics.add.image(sceneWidth/2 - 100, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(45,100).setOffset(50,50);
         this.player.setCollideWorldBounds(true);
         this.player.body.onCollide = true;
 
-/*
+
         this.tweens.add({
             targets: this.player,
-            duration: 5000,
-            y: this.player.y + 100
-        })
-        */
+            duration: 2000,
+            y: this.player.y + 450,
+            x: this.player.x + 100,
+            ease: 'Power1'
+        }).on('complete', () => {
+            this.allow_input = true;
+        });
+
+        
 
 
 
         this.player.allow_input = true;
+
 
         // wait 3 seconds, then spawn the first car
         this.time.delayedCall(3000, () => { 
@@ -94,8 +99,13 @@ class Game extends Phaser.Scene {
     }
 
     addObstacle() {
-        let obstacle = new Obstacle(this, 900);
-        this.obstacleGroup.add(obstacle);
+        if(Phaser.Math.Between(1,2) == 1){
+            let obstacle = new Obstacle(this, 900, 'trashcan');
+            this.obstacleGroup.add(obstacle);
+        }else {
+            let obstacle = new Obstacle(this, 900, 'hydrant');
+            this.obstacleGroup.add(obstacle);
+        }
     }
 
     obstacleCollide() {
@@ -110,7 +120,8 @@ class Game extends Phaser.Scene {
     }
 
     carCollide() {
-        this.player.destroy()
+        this.allow_input = false;
+        this.is_gameover = true;
     } 
 
 /*
@@ -131,29 +142,41 @@ class Game extends Phaser.Scene {
 */
 
 
+
     update()
     {  
-        // -------------------------------- PLAYER MOVEMENT ---------------------------------------
-        const cursors = this.input.keyboard.createCursorKeys();
-        const keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE");
+        if(this.is_gameover == false){
+            if(this.allow_input == true && this.is_gameover == false){
+                this.background.tilePositionY += 15;
 
-        this.background.tilePositionY += 15;
+                // -------------------------------- PLAYER MOVEMENT ---------------------------------------
+                const cursors = this.input.keyboard.createCursorKeys();
+                const keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE");
 
-        // Check if player is pressing left or right, with shift or not
-        if (cursors.left.isDown || keys.A.isDown){
-            this.player.x -= 8;
-        }
-        else if (cursors.right.isDown || keys.D.isDown){
-            this.player.x += 8;
-        }
+                // Check if player is pressing left or right
+                if (cursors.left.isDown || keys.A.isDown){
+                    this.player.body.velocity.x -= 30 ;
+                }
+                else if (cursors.right.isDown || keys.D.isDown){
+                    this.player.body.velocity.x += 30 ;
+                }else if (this.player.body.velocity.x > 0){
+                        this.player.body.velocity.x -= 20;
+                    } else this.player.body.velocity.x += 20;
 
-        if (this.physics.overlap(this.player, this.obstacleGroup)) {
-            this.obstacleCollide();
+                if (this.physics.overlap(this.player, this.obstacleGroup)) {
+                    this.obstacleCollide();
+                }
+                if (this.physics.overlap(this.player, this.carGroup)) {
+                    this.carCollide();
+                }        
+            }else this.background.tilePositionY += 18;
+        }else {
+            this.time.delayedCall(50, () => {
+                this.player.destroy()
+            });
+
+
         }
- 
-        if (this.physics.overlap(this.player, this.carGroup)) {
-            this.carCollide();
-        }        
     }    
 
 }

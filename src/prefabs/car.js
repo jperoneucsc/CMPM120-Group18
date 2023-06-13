@@ -14,7 +14,7 @@ class Car extends Phaser.Physics.Arcade.Sprite {
         this.setVelocityY(-velocity);            // make it go!
         this.setImmovable();                    
         this.newBarrier = true;                 // custom property to control barrier spawning
-        this.setSize(200,190);
+        this.setSize(190,190);
     } 
 
     update() {
