@@ -71,7 +71,7 @@ class Game extends Phaser.Scene {
 
         // Animate the character moving onscreen, then allow player movement
             
-        this.player = this.physics.add.image(sceneWidth/2 - 100, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(45,100).setOffset(50,50);
+        this.player = this.physics.add.image(sceneWidth/2 - 220, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(45,100).setOffset(50,50).setDepth(3);
         this.player.setCollideWorldBounds(true);
         this.player.body.onCollide = true;
         
@@ -79,7 +79,7 @@ class Game extends Phaser.Scene {
             targets: this.player,
             duration: 2000,
             y: this.player.y + 550,
-            x: this.player.x + 100,
+            x: this.player.x + 200,
             ease: 'Power1'
         }).on('complete', () => {
             this.allow_input = true;
@@ -164,6 +164,8 @@ class Game extends Phaser.Scene {
     }
 
     obstacleCollide() {
+        this.cameras.main.shake(100, 0.015);
+        this.player.setTint(0x666666);
         this.allow_input = false;
         this.is_gameover = true;
     } 
@@ -188,6 +190,8 @@ class Game extends Phaser.Scene {
     }
 
     carCollide() {
+        this.cameras.main.shake(100, 0.015);
+        this.player.setTint(0x666666);
         this.allow_input = false;
         this.is_gameover = true;
     } 
@@ -215,23 +219,6 @@ class Game extends Phaser.Scene {
             });
         }
     }
-/*
-    addCoin() {
-        let CspeedVariance =  Phaser.Math.Between(100, 500);
-        let coin = new Coin(this, 1500);
-        this.coinGroup.add(coin);
-    }
-
-    coinCollide() {
-        const coins = this.coinGroup.getChildren();
-        const coin = Phaser.Utils.Array.RemoveRandomElement(coins);
-        if (coin)
-        {
-            coin.destroy();
-        }
-    } 
-*/
-
 
 
     update()
@@ -277,7 +264,7 @@ class Game extends Phaser.Scene {
                 }        
             }else this.background.tilePositionY += 18;
         }else {
-            this.time.delayedCall(50, () => {
+            this.time.delayedCall(100, () => {
                 this.player.destroy();
             });
 
