@@ -16,6 +16,9 @@ class Game extends Phaser.Scene {
         this.load.image('background', 'src/assets/game/gameBG.png')
         this.load.image('skateboarder', 'src/assets/game/skater_player.png')
         this.load.image('car1', 'src/assets/game/car1.png')
+        this.load.image('car2', 'src/assets/game/car2.png')
+        this.load.image('car3', 'src/assets/game/car3.png')
+        this.load.image('car4', 'src/assets/game/car4.png')
         this.load.image('trashcan', 'src/assets/game/trash.png')
         this.load.image('obstacle', 'src/assets/game/trash.png')
 
@@ -69,7 +72,6 @@ class Game extends Phaser.Scene {
     }
 
     addObstacle() {
-        let speedVariance =  Phaser.Math.Between(0, 50);
         let obstacle = new Obstacle(this, 1500);
         this.obstacleGroup.add(obstacle);
     }
@@ -79,8 +81,9 @@ class Game extends Phaser.Scene {
     } 
 
     addCar() {
-        let speedVariance =  Phaser.Math.Between(0, 50);
-        let car = new Car(this, 1500, 'car1');
+        let speedVariance =  Phaser.Math.Between(1400, 1600);
+        let randomNum = Phaser.Math.Between(1,4);
+        let car = new Car(this, speedVariance, 'car' + randomNum);
         this.carGroup.add(car);
     }
 
