@@ -9,11 +9,11 @@ class Title extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image("menuBG", "src/assets/titleMenu/menuBG.png");
-        this.load.image("sprite", "src/assets/titleMenu/skater_side.png");
-        this.load.image("titleText", "src/assets/titleMenu/titleText.png");
+        this.load.image("menuBG", "src/assets/titlemenu/menuBG.png");
+        this.load.image("sprite", "src/assets/titlemenu/skater_side.png");
+        this.load.image("titleText", "src/assets/titlemenu/titleText.png");
         
-        this.load.image("playButtonBack", "src/assets/titleMenu/PlayButtonBack.png");
+        this.load.image("playButtonBack", "src/assets/titlemenu/PlayButtonBack.png");
         //this.load.image("creditsButtonBack", "src/assets/titleMenu/CreditsButtonBack.png");
         /*
         this.load.image("playButtonText", "src/assets/titleMenu/PlayButtonFront.png");
