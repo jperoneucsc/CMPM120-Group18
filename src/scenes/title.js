@@ -14,6 +14,7 @@ class Title extends Phaser.Scene {
         this.load.image("titleText", "src/assets/titlemenu/titleText.png");
         
         this.load.image("playButtonBack", "src/assets/titlemenu/PlayButtonBack.png");
+        this.load.image("fullscreenButton", "src/assets/titlemenu/fullscreenToggle.png");
         //this.load.image("creditsButtonBack", "src/assets/titleMenu/CreditsButtonBack.png");
         /*
         this.load.image("playButtonText", "src/assets/titleMenu/PlayButtonFront.png");
@@ -99,6 +100,15 @@ class Title extends Phaser.Scene {
                 });
             });
 
+            this.fullscreenButton = this.add.image(1030, 50, 'fullscreenButton').setScale(1.6).setScale(0).setInteractive().on('pointerover', () => {
+            }).on('pointerdown', () => {
+                if (this.scale.isFullscreen) {
+                    this.scale.stopFullscreen();
+                } else {
+                    this.scale.startFullscreen();
+                }
+            });
+
             this.titleText = this.add.image(540, 500, 'titleText').setScale(0);
 
             this.tweens.add({
@@ -121,7 +131,7 @@ class Title extends Phaser.Scene {
                     duration: 1000
                 });
                 this.tweens.add({
-                    targets: [this.highScore, this.playButtonBack, this.playButtonText],
+                    targets: [this.highScore, this.playButtonBack, this.playButtonText, this.fullscreenButton],
                     scale: {
                         from: 0,
                         to: 1,
