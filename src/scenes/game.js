@@ -11,6 +11,7 @@ class Game extends Phaser.Scene {
         this.allow_input    = false;    // Can player move
         this.is_pause       = false;    // is the game paused?
         this.is_gameover    = false;    // display gameover screen?
+        this.is_displayed   = false;
         this.current_count  = 0;        // current score
     } 
 
@@ -224,6 +225,50 @@ class Game extends Phaser.Scene {
         }
     }
 
+    endGame(){
+        if (this.current_count > this.highscore){
+            this.highscore = this.current_count;
+        }
+
+        // death screen
+        // touch anywhere to go back to title menu
+        console.log('hello');
+        this.deathScreen = this.add.image(540, 600, 'deathScreen').setDepth(3);
+        this.returnButton = this.add.image(540, 1250, 'replayButton').setInteractive();
+        this.replayButton = this.add.image(540, 1000, 'replayButton').setInteractive();
+        var style = { font: "Bold 64px Courier New", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
+        this.add.text(1080/2, 500, "You Crashed!", style).setOrigin(.5,.5).setScale(1.5).setDepth(4);
+        this.add.text(1080/2, 630, "Points: " + this.current_count, style).setOrigin(.5,.5).setDepth(4);
+        this.add.text(1080/2, 700, "High Score: " + this.highscore, style).setOrigin(.5,.5).setDepth(4);
+        this.replaytext = this.add.text(1080/2, 1000, "Play Again", style).setOrigin(.5,.5).setDepth(4).setInteractive();
+        this.returntext = this.add.text(1080/2, 1250, "Return To Menu", style).setOrigin(.5,.5).setDepth(4).setInteractive();
+        this.returnButton.on('pointerdown', () => {
+            this.cameras.main.fadeOut("1000");
+                this.cameras.main.on('camerafadeoutcomplete', () => {
+                    this.scene.start('Title', {data: this.highscore});
+                });
+        });
+        this.returntext.on('pointerdown', () => {
+            this.cameras.main.fadeOut("1000");
+                this.cameras.main.on('camerafadeoutcomplete', () => {
+                    this.scene.start('Title', {data: this.highscore});
+                });
+        });
+        this.replayButton.on('pointerdown', () => {
+            this.cameras.main.fadeOut("1000");
+                this.cameras.main.on('camerafadeoutcomplete', () => {
+                    this.scene.start('Game', {data: this.highscore});
+                });
+        });
+        this.replaytext.on('pointerdown', () => {
+            this.cameras.main.fadeOut("1000");
+                this.cameras.main.on('camerafadeoutcomplete', () => {
+                    this.scene.start('Game', {data: this.highscore});
+                });
+        });
+        this.returnButton.setDepth(3);
+        this.replayButton.setDepth(3);
+    }
 
     update()
     {  
@@ -273,32 +318,10 @@ class Game extends Phaser.Scene {
             });
 
             this.time.delayedCall(1000, () => {
-                // death screen
-                // touch anywhere to go back to title menu
-                this.deathScreen = this.add.image(540, 600, 'deathScreen');
-                this.returnButton = this.add.image(540, 1250, 'replayButton').setInteractive();
-                this.replayButton = this.add.image(540, 1000, 'replayButton').setInteractive();
-                var style = { font: "Bold 64px Courier New", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
-                this.deathscreen = this.add.text(1080/2, 1000, "Play Again", style).setOrigin(.5,.5);
-                this.deathscreen = this.add.text(1080/2, 1250, "Return To Menu", style).setOrigin(.5,.5);
-                this.returnButton.on('pointerdown', () => {
-                    if (this.current_count > this.highscore){
-                        this.highscore = this.current_count;
-                        this.cameras.main.fadeOut("1000");
-                        this.cameras.main.on('camerafadeoutcomplete', () => {
-                            this.scene.start('Title', {data: this.highscore});
-                        });
-                    }
-                });
-                this.replayButton.on('pointerdown', () => {
-                    if (this.current_count > this.highscore){
-                        this.highscore = this.current_count;
-                        this.cameras.main.fadeOut("1000");
-                        this.cameras.main.on('camerafadeoutcomplete', () => {
-                            this.scene.start('Game', {data: this.highscore});
-                        });
-                    }
-                });
+                if(this.is_displayed == false){
+                    this.endGame();
+                    this.is_displayed = true;
+                }
             });
         }
     }    
