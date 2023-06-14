@@ -81,7 +81,7 @@ class Title extends Phaser.Scene {
             });
 
 
-            this.fullscreenButton = this.add.image(1030, 50, 'fullscreenButton').setScale(1.6).setScale(0).setInteractive().on('pointerover', () => {
+            this.fullscreenButton = this.add.image(75, 75, 'fullscreenButton').setScale(0).setInteractive().on('pointerover', () => {
             }).on('pointerdown', () => {
                 if (this.scale.isFullscreen) {
                     this.scale.stopFullscreen();
@@ -112,6 +112,16 @@ class Title extends Phaser.Scene {
                     duration: 1000
                 });
                 this.tweens.add({
+                    targets: [this.fullscreenButton],
+                    alpha: 1,
+                    scale: {
+                        from: 0,
+                        to: 2,
+                    },
+                    ease: 'Linear',
+                    duration: 1000
+                });
+                this.tweens.add({
                     targets: [this.creditsButtonText],
                     alpha: 1,
                     scale: {
@@ -122,7 +132,7 @@ class Title extends Phaser.Scene {
                     duration: 1000
                 });
                 this.tweens.add({
-                    targets: [this.highScore, this.playButtonBack, this.playButtonText, this.fullscreenButton, this.creditsButtonBack],
+                    targets: [this.highScore, this.playButtonBack, this.playButtonText, this.creditsButtonBack],
                     scale: {
                         from: 0,
                         to: 1,
