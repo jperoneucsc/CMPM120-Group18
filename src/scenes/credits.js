@@ -17,6 +17,15 @@ class Credits extends Phaser.Scene {
 
         let menuBG = this.add.image(0, 0, 'menuBG').setOrigin(0,0).setInteractive();
 
+        this.fullscreenButton = this.add.image(75, 75, 'fullscreenButton').setScale(2).setInteractive().on('pointerover', () => {
+        }).on('pointerdown', () => {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
+        
         // Initialize fonts
         var style = { font: "Bold 132px Courier New", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
         var style2 = { font: "Bold 42px Courier New", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
@@ -30,7 +39,7 @@ class Credits extends Phaser.Scene {
         }).on('pointerdown', () => {
             this.cameras.main.fadeOut("1000");
             this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Game', {data: this.score});
+                this.scene.start('Title', {data: this.score});
             });
         });
         

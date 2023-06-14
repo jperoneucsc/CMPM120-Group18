@@ -9,7 +9,7 @@ let config ={
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            //debug: true,
         }
     },
     scene: [Intro, Title, Game, Credits]

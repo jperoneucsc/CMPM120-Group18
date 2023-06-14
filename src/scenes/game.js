@@ -67,8 +67,9 @@ class Game extends Phaser.Scene {
 
         this.background = this.add.tileSprite(0, 0, 1080, 1920, 'background').setOrigin(0,0);
 
-    
-        
+        //work out half way point of our game
+        var leftHalf = config.width / 2;
+
         
         // Fade in camera
         this.cameras.main.fadeIn(1000);
@@ -76,7 +77,7 @@ class Game extends Phaser.Scene {
 
         // Animate the character moving onscreen, then allow player movement
             
-        this.player = this.physics.add.image(sceneWidth/2 - 220, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(45,100).setOffset(50,50).setDepth(3);
+        this.player = this.physics.add.image(sceneWidth/2 - 220, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(55,100).setOffset(40,50).setDepth(3);
         this.player.setCollideWorldBounds(true);
         this.player.body.onCollide = true;
         
@@ -203,17 +204,17 @@ class Game extends Phaser.Scene {
 
     renderBar(){
         if (this.current_count < 920){
-            this.bar.fillStyle(0x00FF00, 0.8);
+            this.bar.fillStyle(0x228B22, 0.8);
             this.bar.fillRect(100, 30, (this.current_count/3000)*900, 95);
         }
         if (this.current_count > 920 && this.current_count < 2000){
             this.bar2.alpha = 1;
-            this.bar2.fillStyle(0x0000FF, 0.8);
+            this.bar2.fillStyle(0x0047AB, 0.8);
             this.bar2.fillRect(100, 30, (this.current_count/3000)*900, 95);
         }
-        if (this.current_count > 2000 && this.current_count < 3000){
+        if (this.current_count > 2000 && this.current_count < 2920){
             this.bar3.alpha = 1;
-            this.bar3.fillStyle(0xFF0000, 0.8);
+            this.bar3.fillStyle(0x880808, 0.8);
             this.bar3.fillRect(100, 30, (this.current_count/3000)*900, 95);
         }
         if (this.current_count == 3100){
