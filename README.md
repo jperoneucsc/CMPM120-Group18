@@ -19,7 +19,7 @@ Our game utilizes the theme of "nearby in space, distant in time" through storyt
 2. Advanced Visual Asset
 - Our game utilizes an MP4 file for the introduction cutscene.
 3. Procedural Graphics
-- Our game uses the Phaser "Graphics" class to create in-game visual assets
+- Our game uses the Phaser Graphics to prodecurally generate the progress bar.
 ***
 ## Contributor Credits
 Technology Lead: John Perone
