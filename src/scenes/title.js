@@ -38,37 +38,6 @@ class Title extends Phaser.Scene {
 
     
 
-
-        /*
-        let playButtonText = this.add.image(700, 1080/1.8, 'playButtonText').setScale(1.6).setInteractive().on('pointerover', () => {
-            playButtonText.setScale(1.3);
-        }).on('pointerdown', () => {
-            this.cameras.main.fadeOut("1000");
-            this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Game', {data: this.score});
-            });
-        });
-
-
-        // Create Credits Button Back Layer
-        let creditsButtonBack = this.add.image(700, 1080/1.35, 'creditsButtonBack').setScale(1.25).setInteractive().on('pointerover', () => {
-            creditsButtonText.setScale(1);
-        }).on('pointerdown', () => {
-            this.cameras.main.fadeOut("1000");
-            this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Credits');
-            });
-        }); // Create Credits Button Text Layer
-        let creditsButtonText = this.add.image(700, 1080/1.35, 'creditsButtonText').setScale(1.25).setInteractive().on('pointerover', () => {
-            creditsButtonText.setScale(1);
-        }).on('pointerdown', () => {
-            this.cameras.main.fadeOut("1000");
-            this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Credits');
-            });
-        });
-        */
-
     
         
 
@@ -78,6 +47,7 @@ class Title extends Phaser.Scene {
             // If the background is being hovered over, reset button scales
             menuBG.on('pointerover', () => {
                 this.playButtonText.setScale(1);
+                this.creditsButtonText.setScale(.6);
             });
             // Add highscore and floating animation
             this.highScore = this.add.text(850, 305, "Your High Score: " + this.score, style2).setOrigin(.5,.5).setRotation(.6).setScale(0);
@@ -92,13 +62,24 @@ class Title extends Phaser.Scene {
 
             this.playButtonText = this.add.text(540, 860, "PLAY", style).setOrigin(.5,.5).setDepth(1).setScale(2).setAlpha(0);
             this.playButtonBack = this.add.image(540, 860, 'playButtonBack').setScale(1.6).setScale(0).setInteractive().on('pointerover', () => {
-                this.playButtonText.setScale(0.7);
+                this.playButtonText.setScale(0.8);
             }).on('pointerdown', () => {
                 this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
                     this.scene.start('Game', {data: this.score});
                 });
             });
+
+            this.creditsButtonText = this.add.text(540, 1100, "CREDITS", style).setOrigin(.5,.5).setDepth(1).setScale(.6).setAlpha(0);
+            this.creditsButtonBack = this.add.image(540, 1100, 'playButtonBack').setScale(1.6).setScale(0).setInteractive().on('pointerover', () => {
+                this.creditsButtonText.setScale(0.5);
+            }).on('pointerdown', () => {
+                this.cameras.main.fadeOut("1000");
+                this.cameras.main.on('camerafadeoutcomplete', () => {
+                    this.scene.start('Credits', {data: this.score});
+                });
+            });
+
 
             this.fullscreenButton = this.add.image(1030, 50, 'fullscreenButton').setScale(1.6).setScale(0).setInteractive().on('pointerover', () => {
             }).on('pointerdown', () => {
@@ -131,7 +112,17 @@ class Title extends Phaser.Scene {
                     duration: 1000
                 });
                 this.tweens.add({
-                    targets: [this.highScore, this.playButtonBack, this.playButtonText, this.fullscreenButton],
+                    targets: [this.creditsButtonText],
+                    alpha: 1,
+                    scale: {
+                        from: 0,
+                        to: 0.6,
+                    },
+                    ease: 'Linear',
+                    duration: 1000
+                });
+                this.tweens.add({
+                    targets: [this.highScore, this.playButtonBack, this.playButtonText, this.fullscreenButton, this.creditsButtonBack],
                     scale: {
                         from: 0,
                         to: 1,
