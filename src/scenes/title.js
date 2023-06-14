@@ -14,7 +14,7 @@ class Title extends Phaser.Scene {
         this.load.image("titleText", "src/assets/titleMenu/titleText.png");
         
         this.load.image("playButtonBack", "src/assets/titleMenu/PlayButtonBack.png");
-        this.load.image("creditsButtonBack", "src/assets/titleMenu/CreditsButtonBack.png");
+        //this.load.image("creditsButtonBack", "src/assets/titleMenu/CreditsButtonBack.png");
         /*
         this.load.image("playButtonText", "src/assets/titleMenu/PlayButtonFront.png");
         this.load.image("creditsButtonBack", "src/assets/titleMenu/CreditsButtonBack.png");
@@ -24,6 +24,9 @@ class Title extends Phaser.Scene {
     }
 
     create() {
+        if (this.score == null){
+            this.score = 0;
+        }
         this.cameras.main.fadeIn(2000);
 
         let menuBG = this.add.image(0, 0, 'menuBG').setOrigin(0,0).setInteractive();
@@ -71,8 +74,12 @@ class Title extends Phaser.Scene {
 
         // When the scene fades in
         this.cameras.main.on('camerafadeincomplete', () => {
+            // If the background is being hovered over, reset button scales
+            menuBG.on('pointerover', () => {
+                this.playButtonText.setScale(1);
+            });
             // Add highscore and floating animation
-            this.highScore = this.add.text(850, 305, "Your High Score: 0" /*+ this.score*/, style2).setOrigin(.5,.5).setRotation(.6).setScale(0);
+            this.highScore = this.add.text(850, 305, "Your High Score: " + this.score, style2).setOrigin(.5,.5).setRotation(.6).setScale(0);
             this.tweens.add({
                 targets: this.highScore,
                 y: { start: 240, from: 240, to: 190},
@@ -88,7 +95,7 @@ class Title extends Phaser.Scene {
             }).on('pointerdown', () => {
                 this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Game'/*, {data: this.score}*/);
+                    this.scene.start('Game', {data: this.score});
                 });
             });
 
@@ -123,11 +130,6 @@ class Title extends Phaser.Scene {
                     duration: 1000
                 });
             });
-        });
-
-        // If the background is being hovered over, reset button scales
-        menuBG.on('pointerover', () => {
-            this.playButtonText.setScale(1);
         });
     }
 }

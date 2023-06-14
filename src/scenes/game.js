@@ -3,7 +3,8 @@ class Game extends Phaser.Scene {
         super('Game')
     }
 
-    init(){
+    init(data){
+        this.highscore = data.data
         this.DEPTH = { floor: 0};
 
         // Flags
@@ -26,6 +27,9 @@ class Game extends Phaser.Scene {
         this.load.image('trashcan', 'src/assets/game/trash.png')
         this.load.image('hydrant', 'src/assets/game/hydrant.png')
         this.load.atlas('fire', 'src/assets/game/fire.png', 'src/assets/game/fire.json')
+
+        this.load.image("replayButton", "src/assets/game/replayButton.png");
+        this.load.image("deathScreen", "src/assets/game/deathScreen.png");
         
 
 
@@ -268,7 +272,34 @@ class Game extends Phaser.Scene {
                 this.player.destroy();
             });
 
-
+            this.time.delayedCall(1000, () => {
+                // death screen
+                // touch anywhere to go back to title menu
+                this.deathScreen = this.add.image(540, 600, 'deathScreen');
+                this.returnButton = this.add.image(540, 1250, 'replayButton').setInteractive();
+                this.replayButton = this.add.image(540, 1000, 'replayButton').setInteractive();
+                var style = { font: "Bold 64px Courier New", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
+                this.deathscreen = this.add.text(1080/2, 1000, "Play Again", style).setOrigin(.5,.5);
+                this.deathscreen = this.add.text(1080/2, 1250, "Return To Menu", style).setOrigin(.5,.5);
+                this.returnButton.on('pointerdown', () => {
+                    if (this.current_count > this.highscore){
+                        this.highscore = this.current_count;
+                        this.cameras.main.fadeOut("1000");
+                        this.cameras.main.on('camerafadeoutcomplete', () => {
+                            this.scene.start('Title', {data: this.highscore});
+                        });
+                    }
+                });
+                this.replayButton.on('pointerdown', () => {
+                    if (this.current_count > this.highscore){
+                        this.highscore = this.current_count;
+                        this.cameras.main.fadeOut("1000");
+                        this.cameras.main.on('camerafadeoutcomplete', () => {
+                            this.scene.start('Game', {data: this.highscore});
+                        });
+                    }
+                });
+            });
         }
     }    
 
