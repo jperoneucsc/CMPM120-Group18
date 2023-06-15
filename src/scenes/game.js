@@ -144,6 +144,15 @@ class Game extends Phaser.Scene {
             runChildUpdate: true
         })
 
+        this.goLeft = this.add.circle(270, 1200, 50,  '0xff0000')
+        .setInteractive();
+        this.goLeft.setAlpha(0.5);
+        
+        //Button goRight
+        this.goRight = this.add.circle(810, 1200, 50,  '0xff0000')
+        .setInteractive();
+        this.goRight.setAlpha(0.5);
+
 
     }
 
@@ -269,6 +278,7 @@ class Game extends Phaser.Scene {
         });
         this.returnButton.setDepth(3);
         this.replayButton.setDepth(3);
+
     }
 
     update()
@@ -293,6 +303,29 @@ class Game extends Phaser.Scene {
                 // -------------------------------- PLAYER MOVEMENT ---------------------------------------
                 const cursors = this.input.keyboard.createCursorKeys();
                 const keys = this.input.keyboard.addKeys("W,A,S,D,E,SPACE");
+
+                //By clicking the button goLeft
+                this.goLeft.on('pointerdown', function (pointer){
+                    this.goLeft.setAlpha(1);
+                    keys.A.isDown = true;
+                },this);
+                //stop clicking the button goLeft
+                this.goLeft.on('pointerup', function (pointer){
+                    this.goLeft.setAlpha(0.5);
+                    keys.A.isDown = false;
+                },this);
+        
+                //By clicking the button goRight
+                this.goRight.on('pointerdown', function (pointer){
+                    this.goRight.setAlpha(1);
+                    keys.D.isDown = true;
+                },this);
+                //stop clicking the button goRight
+                this.goRight.on('pointerup', function (pointer){
+                    this.goRight.setAlpha(0.5);
+                    keys.D.isDown = false;
+                },this);  
+
 
                 // Check if player is pressing left or right
                 if (cursors.left.isDown || keys.A.isDown){
