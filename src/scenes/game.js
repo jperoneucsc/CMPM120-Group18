@@ -144,12 +144,12 @@ class Game extends Phaser.Scene {
             runChildUpdate: true
         })
 
-        this.goLeft = this.add.circle(270, 1200, 100,  '0xff0000')
+        this.goLeft = this.add.circle(270, 1200, 200,  '0xff0000')
         .setInteractive();
         this.goLeft.setAlpha(0.5);
         
         //Button goRight
-        this.goRight = this.add.circle(810, 1200, 100,  '0xff0000')
+        this.goRight = this.add.circle(810, 1200, 200,  '0xff0000')
         .setInteractive();
         this.goRight.setAlpha(0.5);
 
