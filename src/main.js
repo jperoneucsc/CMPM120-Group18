@@ -12,6 +12,9 @@ let config ={
             //debug: true,
         }
     },
+    audio: {
+        disableWebAudio: false // Enable Web Audio API if available
+    },
     scene: [Intro, Title, Game, Credits]
 };
 

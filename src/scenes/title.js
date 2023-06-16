@@ -3,9 +3,11 @@ class Title extends Phaser.Scene {
         super('Title')
     }
 
-    init(data)
+    init(data, sound)
     {
         this.score = data.data;
+        this.soundToggle = data.sound;
+        this.sound.stopAll();
     }
 
     preload(){
@@ -18,9 +20,19 @@ class Title extends Phaser.Scene {
         this.load.image('cloud1', 'src/assets/titlemenu/cloud1.png')
         this.load.image('cloud2', 'src/assets/titlemenu/cloud2.png')
         this.load.image('cloud3', 'src/assets/titlemenu/cloud3.png')
+
+        this.load.image("musicToggleButton", "src/assets/game/musicToggleButton.png");
+        this.load.audio("backgroundSong", "src/assets/titlemenu/chill-drum-loop-6887.mp3");
     }
 
     create() {
+        // music
+        this.song = this.sound.add('backgroundSong', {volume: 0.15});
+
+        if (this.soundToggle == null){
+            this.soundToggle = true;
+        }
+
         if (this.score == null){
             this.score = 0;
         }
@@ -32,6 +44,8 @@ class Title extends Phaser.Scene {
         var style = { font: "Bold 132px Courier New", fill: '0xFFFFFF', boundsAlignH: 'center', boundsAlignV: 'middle'};
         var style2 = { font: "Bold 42px Courier New", fill: '0x000000', boundsAlignH: 'center', boundsAlignV: 'middle'};
 
+
+
         this.fullscreenButton = this.add.image(75, 75, 'fullscreenButton').setScale(2).setInteractive().on('pointerover', () => {
         }).on('pointerdown', () => {
             if (this.scale.isFullscreen) {
@@ -41,7 +55,13 @@ class Title extends Phaser.Scene {
             }
         });
     
-
+        this.musicToggleButton = this.add.image(225, 75, 'musicToggleButton').setScale(2).setTint(0x999999).setInteractive().on('pointerdown', () => {
+            if (this.soundToggle == true) {
+                this.soundToggle = false;
+            } else {
+                this.soundToggle = true;
+            }
+        });
         this.cloud1 = this.add.image(1200, 200, 'cloud1');
         this.cloud2 = this.add.image(1100, 500, 'cloud2');
         this.cloud3 = this.add.image(500, 800, 'cloud3');
@@ -94,7 +114,8 @@ class Title extends Phaser.Scene {
             }).on('pointerdown', () => {
                 this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Game', {data: this.score});
+                    this.song.stop();
+                    this.scene.start('Game', {data: this.score, sound: this.soundToggle});
                 });
             });
 
@@ -105,7 +126,8 @@ class Title extends Phaser.Scene {
             }).on('pointerdown', () => {
                 this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Credits', {data: this.score});
+                    this.song.stop();
+                    this.scene.start('Credits', {data: this.score, sound: this.soundToggle});
                 });
             });
 
@@ -161,5 +183,17 @@ class Title extends Phaser.Scene {
                 });
             });
         });
+    }
+
+    update(){
+        if (this.soundToggle == false && this.song.isPlaying == true){
+            this.soundToggle = false;
+            this.song.stop();
+            this.musicToggleButton.setTint(0x222222);
+        }
+        if (this.soundToggle == true && this.song.isPlaying == false){
+            this.song.play();
+            this.musicToggleButton.setTint(0x999999);
+        }
     }
 }

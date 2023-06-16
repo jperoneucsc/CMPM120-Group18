@@ -11,18 +11,10 @@ class Intro extends Phaser.Scene {
     create() {
         this.cameras.main.fadeIn(2000);
         this.iterable = false;
-        /*let skateSound = this.sound.add('board',
-        {
-            volume: .15, 
-            delay: 1
-        });
-        */
-
 
 
 
         this.video = this.add.video(540, 1920/2, 'vid').setOrigin(.5,.5).setScale(8);
-        // let hitbox = this.add.rectangle(0,0, 1080, 1920, 0xFFFFFF).setOrigin(0,0).setVisible(true);
         
         this.fullscreenButton = this.add.image(75, 75, 'fullscreenButton').setScale(2).setInteractive().on('pointerover', () => {
         }).on('pointerdown', () => {
@@ -43,7 +35,7 @@ class Intro extends Phaser.Scene {
         });
 
         this.cameras.main.on('camerafadeoutcomplete', () => {
-            this.scene.start('Title');
+            this.scene.start('Title', {sound: this.soundToggle});
         });
     }
 
@@ -54,7 +46,7 @@ class Intro extends Phaser.Scene {
                 this.video.stop()
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Title');
+                this.scene.start('Title', {sound: this.soundToggle});
             });   
             }
         })
@@ -64,9 +56,10 @@ class Intro extends Phaser.Scene {
                 this.video.stop()
                 this.cameras.main.fadeOut(500);
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Title');
+                this.scene.start('Title', {sound: this.soundToggle});
             });   
             }
         })
+
     }
 }

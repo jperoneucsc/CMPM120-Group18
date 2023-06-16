@@ -3,8 +3,9 @@ class Game extends Phaser.Scene {
         super('Game')
     }
 
-    init(data){
+    init(data, sound){
         this.highscore = data.data
+        this.soundToggle = data.sound
         this.DEPTH = { floor: 0};
 
         // Flags
@@ -56,9 +57,13 @@ class Game extends Phaser.Scene {
         const width = this.scale.width;
         const height = this.scale.height;
 
-        //this.backgroundNoise = this.sound.add('rollingSound', {volume : .05, rate : 1.5});
-        //this.backgroundNoise.loop = true;
-        //athis.backgroundNoise.play();
+        
+        // music
+        this.song = this.sound.add('backgroundSong', {volume: 0.15});
+
+        if (this.soundToggle == null){
+            this.soundToggle = true;
+        }
         
         const sceneWidth = 1080;
         const sceneHeight = 1920;
@@ -248,25 +253,29 @@ class Game extends Phaser.Scene {
         this.returnButton.on('pointerdown', () => {
             this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Title', {data: this.highscore});
+                    this.song.stop();
+                    this.scene.start('Title', {data: this.highscore, sound: this.sound});
                 });
         });
         this.returntext.on('pointerdown', () => {
             this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Title', {data: this.highscore});
+                    this.song.stop();
+                    this.scene.start('Title', {data: this.highscore, sound: this.sound});
                 });
         });
         this.replayButton.on('pointerdown', () => {
             this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Game', {data: this.highscore});
+                    this.song.stop();
+                    this.scene.start('Game', {data: this.highscore, sound: this.sound});
                 });
         });
         this.replaytext.on('pointerdown', () => {
             this.cameras.main.fadeOut("1000");
                 this.cameras.main.on('camerafadeoutcomplete', () => {
-                    this.scene.start('Game', {data: this.highscore});
+                    this.song.stop();
+                    this.scene.start('Game', {data: this.highscore, sound: this.sound});
                 });
         });
         this.returnButton.setDepth(3);

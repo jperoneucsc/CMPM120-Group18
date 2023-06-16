@@ -3,9 +3,11 @@ class Credits extends Phaser.Scene {
         super('Credits')
     }
 
-    init(data)
+    init(data, sound)
     {
         this.score = data.data;
+        this.soundToggle = data.sound;
+        this.sound.stopAll();
     }
 
     preload(){
@@ -13,6 +15,10 @@ class Credits extends Phaser.Scene {
     }
 
     create() {
+        // music
+        this.song = this.sound.add('backgroundSong', {volume: 0.15});
+        this.song.isPlaying = false;
+
         this.cameras.main.fadeIn(2000);
 
         let menuBG = this.add.image(0, 0, 'menuBG').setOrigin(0,0).setInteractive();
@@ -23,6 +29,16 @@ class Credits extends Phaser.Scene {
                 this.scale.stopFullscreen();
             } else {
                 this.scale.startFullscreen();
+            }
+        });
+
+        this.musicToggleButton = this.add.image(225, 75, 'musicToggleButton').setScale(2).setTint(0x999999).setInteractive().on('pointerdown', () => {
+            if (this.soundToggle == true) {
+                this.song.isPlaying = true;
+                this.soundToggle = false;
+            } else {
+                this.song.isPlaying = false;
+                this.soundToggle = true;
             }
         });
         
@@ -37,6 +53,7 @@ class Credits extends Phaser.Scene {
         this.add.text(540, 625, "Brandon Hwu", style3).setOrigin(.5,.5).setDepth(1).setScale(1);
         this.add.text(540, 775, "Art and Writing", style).setOrigin(.5,.5).setDepth(1).setScale(0.7);
         this.add.text(540, 875, "Craig Schroeder", style3).setOrigin(.5,.5).setDepth(1).setScale(1);
+        this.add.text(540, 1050, "Audio From Pixabay.com", style).setOrigin(.5,.5).setDepth(1).setScale(0.4);
 
 
         this.playButtonText = this.add.text(540, 1250, "Return", style).setOrigin(.5,.5).setDepth(1).setScale(0.8);
@@ -45,7 +62,8 @@ class Credits extends Phaser.Scene {
         }).on('pointerdown', () => {
             this.cameras.main.fadeOut("500");
             this.cameras.main.on('camerafadeoutcomplete', () => {
-                this.scene.start('Title', {data: this.score});
+                this.song.stop();
+                this.scene.start('Title', {data: this.score, sound: this.soundToggle});
             });
         });
         
@@ -57,5 +75,17 @@ class Credits extends Phaser.Scene {
         });
 
         });
+    }
+
+    update(){
+        if (this.soundToggle == false && this.song.isPlaying == true){
+            this.song.stop();
+            this.song.isPlaying = false;
+            this.musicToggleButton.setTint(0x222222);
+        }
+        if (this.soundToggle == true && this.song.isPlaying == false){
+            this.song.play();
+            this.musicToggleButton.setTint(0x999999);
+        }
     }
 }
