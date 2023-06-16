@@ -74,7 +74,6 @@ class Game extends Phaser.Scene {
         // Fade in camera
         this.cameras.main.fadeIn(1000);
 
-
         // Animate the character moving onscreen, then allow player movement
             
         this.player = this.physics.add.image(sceneWidth/2 - 220, -250, 'skateboarder').setScale(1.5).setAngle(180).setSize(55,100).setOffset(40,50).setDepth(3);
@@ -123,10 +122,6 @@ class Game extends Phaser.Scene {
             });
         });
 
-        
-
-
-
         this.player.allow_input = true;
 
 
@@ -144,15 +139,12 @@ class Game extends Phaser.Scene {
             runChildUpdate: true
         })
 
-        this.goLeft = this.add.circle(270, 1200, 200,  '0xff0000')
-        .setInteractive();
-        this.goLeft.setAlpha(0.5);
+        this.goLeft = this.add.rectangle(540, 1920/2, 540, 1920,  '0xff0000').setOrigin(1,.5).setInteractive();
+        this.goLeft.setAlpha(0);
         
         //Button goRight
-        this.goRight = this.add.circle(810, 1200, 200,  '0xff0000')
-        .setInteractive();
-        this.goRight.setAlpha(0.5);
-
+        this.goRight = this.add.rectangle(540, 1920/2, 540, 1920,  '0xff0000').setOrigin(0,.5).setInteractive();
+        this.goRight.setAlpha(0);
 
     }
 
@@ -235,6 +227,7 @@ class Game extends Phaser.Scene {
         }
     }
 
+
     endGame(){
         if (this.current_count > this.highscore){
             this.highscore = this.current_count;
@@ -278,8 +271,8 @@ class Game extends Phaser.Scene {
         });
         this.returnButton.setDepth(3);
         this.replayButton.setDepth(3);
-
     }
+
 
     update()
     {  
@@ -306,26 +299,20 @@ class Game extends Phaser.Scene {
 
                 //By clicking the button goLeft
                 this.goLeft.on('pointerdown', function (pointer){
-                    this.goLeft.setAlpha(1);
                     keys.A.isDown = true;
                 },this);
-                //stop clicking the button goLeft
+                //By clicking the button goLeft
                 this.goLeft.on('pointerup', function (pointer){
-                    this.goLeft.setAlpha(0.5);
                     keys.A.isDown = false;
                 },this);
-        
-                //By clicking the button goRight
+                //By clicking the button goLeft
                 this.goRight.on('pointerdown', function (pointer){
-                    this.goRight.setAlpha(1);
                     keys.D.isDown = true;
                 },this);
                 //stop clicking the button goRight
                 this.goRight.on('pointerup', function (pointer){
-                    this.goRight.setAlpha(0.5);
                     keys.D.isDown = false;
-                },this);  
-
+                },this);
 
                 // Check if player is pressing left or right
                 if (cursors.left.isDown || keys.A.isDown){

@@ -50,7 +50,16 @@ class Intro extends Phaser.Scene {
     update(){
         this.input.keyboard.on('keydown', () => {
             if(this.iterable == false){
-                console.log('hasdffasd')
+                this.iterable = true;
+                this.video.stop()
+                this.cameras.main.fadeOut(500);
+                this.cameras.main.on('camerafadeoutcomplete', () => {
+                this.scene.start('Title');
+            });   
+            }
+        })
+        this.input.on('pointerdown', () => {
+            if(this.iterable == false){
                 this.iterable = true;
                 this.video.stop()
                 this.cameras.main.fadeOut(500);
