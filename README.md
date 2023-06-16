@@ -1,6 +1,12 @@
 # CMPM120-Group18
 Final Project for Group 18, CMPM 120, UCSC 2023 Spring Quarter
 
+# Grading Notes:
+We were marked off for not having fullscreen on mobile devices, but our fullscreen does work with mobile devices;
+Correct me if I am wrong but as far as I am aware it is literally impossible to make a game fullcreen on iOS safari? 
+Also, this new submission adds mobile controls, background music, and the music toggle button ( music toggle data saves between the title menu and credits scene).
+
+
 By John Perone, Craig Schroeder, and Brandon Hwu
 ***
 ## Prototypes
