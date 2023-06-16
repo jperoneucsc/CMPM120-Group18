@@ -140,11 +140,11 @@ class Game extends Phaser.Scene {
         })
 
         this.goLeft = this.add.rectangle(540, 1920/2, 540, 1920,  '0xff0000').setOrigin(1,.5).setInteractive();
-        this.goLeft.setAlpha(0);
+        this.goLeft.setAlpha(0.01);
         
         //Button goRight
         this.goRight = this.add.rectangle(540, 1920/2, 540, 1920,  '0xff0000').setOrigin(0,.5).setInteractive();
-        this.goRight.setAlpha(0);
+        this.goRight.setAlpha(0.01);
 
     }
 
